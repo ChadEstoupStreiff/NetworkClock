@@ -15,7 +15,7 @@ int main()
     if (check_DEP() != 0)
         perror("WARNING >> DEP(NX) is not enabled !");
     if (drop_privilegies() != 0)
-        perror("WARNING >> Wrong privileges !");
+        perror("WARNING >> Can't drop privileges !");
 
     printf("Reading conf ...\n");
     // Reading configuration

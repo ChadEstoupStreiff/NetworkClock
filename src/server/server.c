@@ -56,12 +56,12 @@ void start_server(int port, int max_clients)
         cliend_id++;
 
         // Fork on any new connection to continue accepting connection while still answering to current connection
-        printf("SERVER >> [CLIENT %i] New client connected\n", cliend_id);
         switch (fork())
         {
         case 0:
             do
             {
+                printf("SERVER >> [CLIENT %i] New client connected\n", cliend_id);
                 // Read from connection
                 char buffer[BUFFER_LENGTH];
                 int valread = 0;

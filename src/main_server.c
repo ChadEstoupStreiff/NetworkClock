@@ -33,7 +33,7 @@ int main(int argc, char const *argv[])
     if (check_DEP() != 0)
         perror("WARNING >> DEP(NX) is not enabled !");
     if (drop_privilegies() != 0)
-        perror("WARNING >> Wrong privileges !");
+        perror("WARNING >> Can't drop privileges !");
     if (argc == 1)
     {
         printf("INFO >> Starting...\n");

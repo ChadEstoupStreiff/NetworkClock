@@ -8,6 +8,7 @@ int main(int argc, char const *argv[])
     if (argc == 2)
     {
         check_DEP();
+        // Try to drop privilegies and reeanble settime
         drop_privilegies();
         enable_settime_capability();
 

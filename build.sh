@@ -10,9 +10,7 @@ echo "Building settime application"
 gcc -o bin/settime_app src/main_settime.c src/core/security.c -lcap
 
 echo "Setting permissions"
-sudo setcap cap_setpcap+ep bin/server_app
-sudo setcap cap_setpcap+ep bin/client_app
-sudo setcap cap_setpcap+ep bin/settime_app
+sudo setcap 'cap_sys_time=ep' bin/settime_app
 
 chmod 100 bin/server_app
 chmod 100 bin/client_app
