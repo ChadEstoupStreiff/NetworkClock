@@ -44,6 +44,7 @@ int get_arg(char *buffer, int command_length, char *arg_buffer)
         }
         arg_buffer[i - command_length - 1] = buffer[i];
     }
+    arg_buffer[MAX_COMMAND_BUFFER_LENGTH - 1] = '\0';
     return MAX_COMMAND_LENGTH - command_length - 1;
 }
 
@@ -68,7 +69,7 @@ void start_console()
             if (strcmp(command, "time") == 0)
             {
                 // Setup space for argument input and get argument
-                char *arg = malloc(sizeof(char) * (MAX_COMMAND_LENGTH - command_length - 1));
+                char *arg = malloc(sizeof(char) * (MAX_COMMAND_BUFFER_LENGTH - command_length - 1));
                 int arg_length = get_arg(buffer, command_length, arg);
 
                 // If no argument, get default time format, instead give a formated current time
@@ -84,7 +85,7 @@ void start_console()
             else if (strcmp(command, "settime") == 0)
             {
                 // Setup space for argument input and get argument
-                char *arg = malloc(sizeof(char) * (MAX_COMMAND_LENGTH - command_length - 1));
+                char *arg = malloc(sizeof(char) * (MAX_COMMAND_BUFFER_LENGTH - command_length - 1));
                 int arg_length = get_arg(buffer, command_length, arg);
 
                 // If no argument, print error, instead set time based on argument
@@ -93,8 +94,14 @@ void start_console()
                     printf("CONSOLE >> Please, input a time to set!\n");
                 else
                 {
-                    set_time(atoi(arg));
-                    printf("CONSOLE >> Time set !\n");
+                    if (set_time(arg) == 0)
+                    {
+                        printf("CONSOLE >> Time set !\n");
+                    }
+                    else
+                    {
+                        printf("CONSOLE >> Error setting time !\n");
+                    }
                 }
             }
             // If command is unknown

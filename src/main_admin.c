@@ -5,26 +5,34 @@
 
 int main(int argc, char **argv)
 {
-    if (argc == 0)
-    {
-        perror("No argument given");
-        exit(1);
-    }
     if (setuid(0))
     {
         perror("Permission denied");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
-    struct timeval tv;
+    if (argc <= 1)
+    {
+        perror("No argument given");
+        exit(EXIT_FAILURE);
+    }
 
-    tv.tv_sec = atoi(argv[1]);
+    long int new_time = atol(argv[1]);
+    if (new_time <= 0)
+    {
+        perror("Invalid argument");
+        exit(EXIT_FAILURE);
+    }
+    printf("New time: %li\n", new_time);
+
+    struct timeval tv;
+    tv.tv_sec = new_time;
     tv.tv_usec = 0;
 
-    if (settimeofday(&tv, NULL) == -1)
+    if (settimeofday(&tv, NULL) < 0)
     {
         perror("Can't set time");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     return 0;

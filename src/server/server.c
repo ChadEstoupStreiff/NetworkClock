@@ -5,6 +5,8 @@
 #include <arpa/inet.h>
 #include "time.h"
 
+#define BUFFER_LENGTH 1024
+
 void start_server(int port, int max_clients)
 {
     // Setup server variables
@@ -61,8 +63,8 @@ void start_server(int port, int max_clients)
             do
             {
                 // Read from connection
-                char buffer[1024];
-                valread = read(new_socket, buffer, 1024);
+                char buffer[BUFFER_LENGTH];
+                valread = read(new_socket, buffer, BUFFER_LENGTH - 1);
                 if (valread == -1)
                 {
                     perror("SERVER >> Error reading");
