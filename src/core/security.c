@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include <sys/types.h>
+#include <sys/prctl.h>
+#include <linux/capability.h>
+#include <sys/capability.h>
 
 int check_DEP()
 {
@@ -16,19 +20,64 @@ int check_DEP()
         if (strstr(arg, " nx ") != NULL)
         {
             fclose(cpuinfo);
-            return 1;
+            return 0;
         }
     }
-    return 0;
+    return 1;
 }
 
-int drop_root_privilegies()
+int drop_privilegies()
 {
     uid_t uid = getuid();
     gid_t gid = getgid();
 
     if ((setgid(gid) != 0) || (setuid(uid) != 0))
         return 0;
+    
+    if (prctl(PR_CAPBSET_DROP, CAP_LAST_CAP, 0, 0, 0) == -1) {
+        perror("Capabalities dropping failed");
+        return 1;
+    }
 
-    return 1;
+    if (prctl(PR_CAPBSET_READ, CAP_LAST_CAP) == -1) {
+        perror("Capabalities not dropped");
+        return 1;
+    }
+
+    return 0;
+}
+
+int enable_settime_capability()
+{
+    cap_t caps = cap_get_proc();
+    cap_value_t cap_value = CAP_SYS_TIME;
+    if (cap_set_flag(caps, CAP_EFFECTIVE, 1, &cap_value, CAP_SET) == -1) {
+        perror("cap_set_flag");
+        return 1;
+    }
+    if (cap_set_proc(caps) == -1) {
+        perror("cap_set_proc");
+        return 1;
+    }
+
+    cap_t caps_enabled = cap_get_proc();
+    if (caps_enabled == NULL) {
+        perror("cap_get_proc");
+        return 1;
+    }
+    if (cap_get_flag(caps_enabled, CAP_EFFECTIVE, 1, &cap_value) == -1) {
+        perror("cap_get_flag");
+        return 1;
+    }
+
+    if (cap_value == CAP_SYS_TIME) {
+        printf("CAP_SYS_TIME capability enabled.\n");
+    } else {
+        printf("Failed to enable CAP_SYS_TIME capability.\n");
+    }
+
+    cap_free(caps);
+    cap_free(caps_enabled);
+
+    return 0;
 }

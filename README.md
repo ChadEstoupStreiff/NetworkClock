@@ -3,7 +3,7 @@ Work of Secure Code in Prague courses.
 [You can read the subject here](SUBJECT.md)
 
 ## Setup and launch
-If not already done, build applications by launching build script:
+If not already done, build applications by launching build script: 
 > bash build.sh
 
 After editing config files, you can launch server or client by executing those commands:

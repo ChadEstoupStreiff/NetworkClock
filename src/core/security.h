@@ -1,2 +1,3 @@
 int check_DEP();
-int drop_root_privilegies();
+int drop_privilegies();
+int enable_settime_capability();

@@ -5,6 +5,7 @@
 
 #define MAX_FORMATED_TIME_LENGTH 64
 #define ADMIN_BUFFER_LENGTH 1024
+#define MAX_PATH_LENGTH 1024
 
 char *get_time(char *format)
 {
@@ -30,12 +31,16 @@ int set_time(char *time)
     struct tm tm;
     if (strptime(time, "%F %T", &tm) != NULL)
     {
+        char self_path[MAX_PATH_LENGTH];
+        int nchar = readlink("/proc/self/exe", self_path, MAX_PATH_LENGTH);
+        self_path[nchar] = '\0';
+
         // Convert time to seconds
         time_t t = mktime(&tm);
 
         // Creating command string
         char admin_buffer[ADMIN_BUFFER_LENGTH];
-        sprintf(admin_buffer, "sudo ./settime_app %li", t);
+        sprintf(admin_buffer, "sudo %s %li", self_path, t);
 
         // Executing settime app
         printf("CONSOLE >> Executing command: %s\n", admin_buffer);

@@ -11,13 +11,13 @@
 
 int main()
 {
-    printf("INFO >> Checking...\n");
-    if (check_DEP() != 1)
+    printf("Checking...\n");
+    if (check_DEP() != 0)
     {
         perror("ERROR >> Enable DEP(NX) to run this application");
         exit(EXIT_FAILURE);
     }
-    if (drop_root_privilegies() != 1)
+    if (drop_privilegies() != 0)
     {
         perror("ERROR >> Unable to drop root privilegies");
         exit(EXIT_FAILURE);

@@ -51,7 +51,5 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-server_app
-client_app
-admin_app
-settime_app
+/server_app
+/client_app
