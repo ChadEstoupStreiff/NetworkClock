@@ -22,24 +22,25 @@ char *get_time(char *format)
 
 int set_time(char *time)
 {
+    // Read user input
     struct tm tm;
     if (strptime(time, "%F %T", &tm) != NULL)
     {
+        // Convert time to seconds
         time_t t = mktime(&tm);
 
-        // printf("year: %d; month: %d; day: %d;\n", tm.tm_year, tm.tm_mon, tm.tm_mday);
-        // printf("hour: %d; minute: %d; second: %d\n",  tm.tm_hour, tm.tm_min, tm.tm_sec);
-        // printf("week day: %d; year day: %d\n", tm.tm_wday, tm.tm_yday);
-
+        // Creating command string
         char admin_buffer[ADMIN_BUFFER_LENGTH];
-        sprintf(admin_buffer, "sudo ./admin_app %li", t);
+        sprintf(admin_buffer, "sudo ./settime_app %li", t);
 
+        // Executing settime app
         printf("CONSOLE >> Executing command: %s\n", admin_buffer);
         int return_value = system(admin_buffer);
         return return_value;
     }
     else
     {
+        // Error date and time format
         printf("CONSOLE >> Bad input date and time format !\n");
         return -1;
     }
