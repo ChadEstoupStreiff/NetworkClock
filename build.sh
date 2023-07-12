@@ -1,0 +1,1 @@
+gcc -o app src/main.c src/time.c
