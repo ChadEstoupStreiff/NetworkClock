@@ -4,7 +4,6 @@
 
 #define MAX_FORMATED_TIME_LENGTH 64
 
-// function that take a format and return current time in this format
 char *get_time(char *format)
 {
     // Get time info
@@ -21,4 +20,5 @@ char *get_time(char *format)
 
 char *set_time(int time)
 {
+    // IN DEV
 }

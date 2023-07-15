@@ -8,16 +8,20 @@
 
 void *server()
 {
+    // Read configuration parameters
     printf("SERVER >> Reading conf ...\n");
     int max_cli = get_config_int_value(CONFIG_PATH, "MCLI");
     int port = get_config_int_value(CONFIG_PATH, "PORT");
     printf("SERVER >> Server port = %i\n", port);
     printf("SERVER >> Server max number of clients = %i\n", max_cli);
+    
+    // Start server
     start_server(port, max_cli);
 }
 
 void *console_input()
 {
+    // Start console reading
     start_console();
 }
 
