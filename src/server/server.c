@@ -61,15 +61,16 @@ void start_server(int port, int max_clients)
                     perror("SERVER >> Error reading");
                     exit(EXIT_FAILURE);
                 }
+                buffer[valread] = '\0';
                 printf("SERVER >> [CLIENT %i] Client time format request: %s\n", cliend_id, buffer);
 
                 char *answer;
-                if (valread == 0)
+                if (valread == 0 || strcmp(buffer, "time") == 0 || strcmp(buffer, "get") == 0 || strcmp(buffer, "default") == 0)
                     answer = get_time("%F %r");
                 else
                     answer = get_time(buffer);
                 send(new_socket, answer, strlen(answer), 0);
-                printf("SERVER >> [CLIENT %i] Answer: %s\n", cliend_id, buffer);
+                printf("SERVER >> [CLIENT %i] Answer: %s\n", cliend_id, answer);
             } while (valread > 0);
 
             close(new_socket);

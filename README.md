@@ -37,7 +37,8 @@ MCLI 100
 
 ## Client application
 ### Command
-You can type in every format you need and the server will answer current time formated. see regex date formatting to know how to use.   
+You can type in every format you need and the server will answer current time formated. see regex date formatting to know how to use.  
+Sending "time", "get" or "default" will return default time formating of server.    
 ### Config
 Edit server.config with parameters you need. 
 ```

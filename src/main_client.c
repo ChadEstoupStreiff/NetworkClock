@@ -6,6 +6,7 @@
 #include "core/config.h"
 
 #define CONFIG_PATH "client.config"
+#define BUFFER_LENGTH 1024
 
 int main()
 {
@@ -20,6 +21,11 @@ int main()
     struct sockaddr_in serv_addr;
 
     sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock == -1)
+    {
+        perror("Error creating socket");
+        exit(EXIT_FAILURE);
+    }
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(port);
     inet_pton(AF_INET, addr, &serv_addr.sin_addr);
@@ -28,17 +34,26 @@ int main()
         printf("Connected !\n");
         while (1)
         {
-            int message_length = 20;
+            int message_length = 64;
             char message[message_length];
             printf("\nType time format you want:\n");
-            scanf("%19s", message);
+            scanf("%63s", message);
 
-            send(sock, message, message_length, 0);
+            if (send(sock, message, message_length, 0) == -1)
+            {
+                perror("SERVER >> Error sending");
+                exit(EXIT_FAILURE);
+            }
             printf("Format request: %s\n", message);
 
-            int buffer_length = 1024;
-            char buffer[buffer_length];
-            valread = read(sock, buffer, 1024);
+            char buffer[BUFFER_LENGTH];
+            valread = read(sock, buffer, BUFFER_LENGTH);
+            if (valread == -1)
+            {
+                perror("Error reading");
+                exit(EXIT_FAILURE);
+            }
+            buffer[valread] = '\0';
             printf("Server answer: %s\n", buffer);
         }
     }
