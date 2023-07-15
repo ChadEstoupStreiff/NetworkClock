@@ -47,7 +47,7 @@ void start_console()
     while (1)
     {
 
-        printf("CONSOLE>> Enter command:\n");
+        printf("CONSOLE >> Enter command:\n");
         fgets(buffer, MAX_COMMAND_BUFFER_LENGTH, stdin);
 
         char *command = malloc(sizeof(char) * MAX_COMMAND_LENGTH);
@@ -70,11 +70,21 @@ void start_console()
             }
             else if (strcmp(command, "settime") == 0)
             {
-                printf("SetTime command \n");
+                char *arg = malloc(sizeof(char) * (MAX_COMMAND_LENGTH - command_length - 1));
+                int arg_length = get_arg(buffer, command_length, arg);
+
+                char *time;
+                if (arg_length == 0)
+                    printf("CONSOLE >> Please, input a time to set!\n");
+                else
+                {
+                    set_time(atoi(arg));
+                    printf("CONSOLE >> Time set !\n");
+                }
             }
             else
             {
-                printf("Unknown command, try again!\n");
+                printf("CONSOLE >> Unknown command, try again!\n");
             }
         }
 

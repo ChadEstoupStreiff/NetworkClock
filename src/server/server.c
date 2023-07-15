@@ -14,14 +14,26 @@ void start_server(int port, int max_clients)
 
     // Create socket
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
-    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+    if (server_fd == -1)
+    {
+        perror("SERVER >> Error creating socket");
+        exit(EXIT_FAILURE);
+    }
 
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(port);
 
-    bind(server_fd, (struct sockaddr *)&address, sizeof(address));
-    listen(server_fd, max_clients);
+    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) == -1)
+    {
+        perror("SERVER >> Error binding");
+        exit(EXIT_FAILURE);
+    }
+    if (listen(server_fd, max_clients) == -1)
+    {
+        perror("SERVER >> Error listening");
+        exit(EXIT_FAILURE);
+    }
 
     printf("SERVER >> Server listening on port %d\n", port);
 
@@ -30,6 +42,11 @@ void start_server(int port, int max_clients)
     while (1)
     {
         new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
+        if (new_socket == -1)
+        {
+            perror("SERVER >> Error accepting connection");
+            exit(EXIT_FAILURE);
+        }
         cliend_id++;
 
         printf("SERVER >> [CLIENT %i] New client connected\n", cliend_id);
@@ -39,9 +56,18 @@ void start_server(int port, int max_clients)
             {
                 char buffer[1024];
                 valread = read(new_socket, buffer, 1024);
+                if (valread == -1)
+                {
+                    perror("SERVER >> Error reading");
+                    exit(EXIT_FAILURE);
+                }
                 printf("SERVER >> [CLIENT %i] Client time format request: %s\n", cliend_id, buffer);
 
-                char *answer = get_time(buffer);
+                char *answer;
+                if (valread == 0)
+                    answer = get_time("%F %r");
+                else
+                    answer = get_time(buffer);
                 send(new_socket, answer, strlen(answer), 0);
                 printf("SERVER >> [CLIENT %i] Answer: %s\n", cliend_id, buffer);
             } while (valread > 0);
