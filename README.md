@@ -21,7 +21,7 @@ Command line inputs and server are separated in two threads.
 
 ### Commands
 In command line you have this commands:
-- time [format]: will display current time, if format is specified will adapt to format, see [regex date formatting](##regex-date-formatting) to know how to use.  
+- time [format]: will display current time, if format is specified will adapt to format, see [regex date formatting](#regex-date-formatting) to know how to use.  
 - settime <time>: will set time.  
 
 On server socket you can connect and send the format you need, the server will answer with current time formated.  
@@ -37,7 +37,7 @@ MCLI 100
 
 ## Client application
 ### Command
-You can type in every format you need and the server will answer current time formated. see [regex date formatting](##regex-date-formatting) to know how to use.  
+You can type in every format you need and the server will answer current time formated. see [regex date formatting](#regex-date-formatting) to know how to use.  
 Sending "time", "get" or "default" will return default time formating of server.    
 ### Config
 Edit server.config with parameters you need. 
