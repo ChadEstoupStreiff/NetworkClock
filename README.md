@@ -1,6 +1,15 @@
 # NetworkClock
 Work of Secure Code in Prague courses.  
 [You can read the subject here](subject/index.html)
+
+## Setup and launch
+If not already done, build applications by launching build script:
+> bash build.sh
+
+After editing config files, you can launch server or client by executing those commands:
+> bash server_app  
+> bash client_app  
+
 ## Objectives
 - In order to be eligible for any points, the application must, at the very least, work locally for the interactive user: The non-network user must be able to request the time in a format specified by him, and must be able to set the system time. The application must run with the privileges of a regular user, any high privileged tasks must be done through a separate application which will be executed with elevated privileges.  
     - Make sure the application isn’t vulnerable to buffer overflow, format string abuse, malformed input, etc.
