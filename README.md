@@ -1,6 +1,6 @@
 # NetworkClock
 Work of Secure Code in Prague courses.  
-[You can read the subject here](subject/index.html)
+[You can read the subject here](SUBJECT.md)
 
 ## Setup and launch
 If not already done, build applications by launching build script:
@@ -23,7 +23,7 @@ After editing config files, you can launch server or client by executing those c
 - ✓ The application should allow remote users to connect and request the current date/time. [1 point]
 - ✓ The remote users may not set the time, but they may specify a format string for the display of the current time. [3 points]
 - ✓ Within one connection, the user should be able to ask for multiple formats. [1 point]
-- TCP port used by the server part will be configured through a configuration file or a registry key. Explain your choice of location, including the ACLs for it. [1 point]
+- ✓ TCP port used by the server part will be configured through a configuration file or a registry key. Explain your choice of location, including the ACLs for it. [1 point]
 - Any security issues found will decrease the final score.
 ## Server application  
 Command line inputs and server are separated in two threads.  

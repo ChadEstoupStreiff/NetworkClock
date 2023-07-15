@@ -55,8 +55,9 @@ void start_server(int port, int max_clients)
 
         // Fork on any new connection to continue accepting connection while still answering to current connection
         printf("SERVER >> [CLIENT %i] New client connected\n", cliend_id);
-        if (fork() == 0)
+        switch (fork())
         {
+        case 0:
             do
             {
                 // Read from connection
@@ -69,7 +70,7 @@ void start_server(int port, int max_clients)
                 }
                 buffer[valread] = '\0';
                 printf("SERVER >> [CLIENT %i] Client time format request: %s\n", cliend_id, buffer);
-                
+
                 // Get time based on readed request
                 char *answer;
                 if (valread == 0 || strcmp(buffer, "time") == 0 || strcmp(buffer, "get") == 0 || strcmp(buffer, "default") == 0)
@@ -81,10 +82,15 @@ void start_server(int port, int max_clients)
                 send(new_socket, answer, strlen(answer), 0);
                 printf("SERVER >> [CLIENT %i] Answer: %s\n", cliend_id, answer);
             } while (valread > 0);
-            
+
             // Close connection
             close(new_socket);
             printf("SERVER >> [CLIENT %i] Client disconnected\n", cliend_id);
+        case -1:
+            // Error
+            close(new_socket);
+            printf("SERVER >> [CLIENT %i] Error creating client processus, client disconnected\n", cliend_id);
+        default:
         }
     }
 }

@@ -53,3 +53,4 @@ dkms.conf
 
 server_app
 client_app
+admin_app
