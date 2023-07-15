@@ -5,10 +5,7 @@
 #include <arpa/inet.h>
 #include "time.h"
 
-#define PORT 8080
-#define MAX_CLIENTS 50
-
-void start_server() {
+void start_server(int port, int max_clients) {
     int server_fd, new_socket, valread;
     struct sockaddr_in address;
     int opt = 1;
@@ -20,12 +17,12 @@ void start_server() {
 
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons(PORT);
+    address.sin_port = htons(port);
 
     bind(server_fd, (struct sockaddr *)&address, sizeof(address));
-    listen(server_fd, MAX_CLIENTS);
+    listen(server_fd, max_clients);
 
-    printf("SERVER >> Server listening on port %d\n", PORT);
+    printf("SERVER >> Server listening on port %d\n", port);
 
     int cliend_id = 0;
     // Accept incoming connections

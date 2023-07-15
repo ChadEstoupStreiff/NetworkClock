@@ -1,26 +1,24 @@
 #include <stdio.h>
 #include <pthread.h>
-#include <stdlib.h>
-#include "time.h"
-#include "server.h"
+#include "core/config.h"
+#include "server/server.h"
+#include "server/console.h"
 
+#define CONFIG_PATH "server.config"
 
 void* server()
 {
-    start_server();
+    printf("SERVER >> Reading conf ...\n");
+    int max_cli = get_config_int_value(CONFIG_PATH, "MCLI");
+    int port = get_config_int_value(CONFIG_PATH, "PORT");
+    printf("SERVER >> Server port = %i\n", port);
+    printf("SERVER >> Server max number of clients = %i\n", max_cli);
+    start_server(port, max_cli);
 }
 
 void* console_input()
 {
-    while(1) {
-        int buffer_length = 20;
-        char buffer[buffer_length];
-
-        printf("CONSOLE>> Enter date format:\n");
-        scanf("%19s", buffer);
-
-        printf("CONSOLE>> Time: %s\n", get_time(buffer));
-    }
+    start_console();
 }
 
 int main(int argc, char const *argv[])

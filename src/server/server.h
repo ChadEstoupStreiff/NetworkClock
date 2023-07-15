@@ -1,0 +1,1 @@
+void start_server(int port, int max_clients);

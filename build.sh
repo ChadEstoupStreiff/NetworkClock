@@ -1,2 +1,2 @@
-gcc -o server_app server/main.c server/time.c server/server.c
-gcc -o client_app client/main.c
+gcc -o server_app src/main_server.c src/core/config.c src/server/time.c src/server/server.c src/server/console.c
+gcc -o client_app src/main_client.c src/core/config.c
