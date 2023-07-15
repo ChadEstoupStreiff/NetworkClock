@@ -7,9 +7,10 @@
 
 #define CONFIG_PATH "client.config"
 
-int main() {
+int main()
+{
     printf("Reading conf ...\n");
-    char* addr = get_config_str_value(CONFIG_PATH, "ADDR");
+    char *addr = get_config_str_value(CONFIG_PATH, "ADDR");
     int port = get_config_int_value(CONFIG_PATH, "PORT");
     printf("Server address = %s\n", addr);
     printf("Server port = %i\n", port);
@@ -22,9 +23,11 @@ int main() {
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(port);
     inet_pton(AF_INET, addr, &serv_addr.sin_addr);
-    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) == 0) {
+    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) == 0)
+    {
         printf("Connected !\n");
-        while(1) {
+        while (1)
+        {
             int message_length = 20;
             char message[message_length];
             printf("\nType time format you want:\n");
@@ -38,7 +41,8 @@ int main() {
             valread = read(sock, buffer, 1024);
             printf("Server answer: %s\n", buffer);
         }
-    } else
+    }
+    else
         printf("Error connecting ! Try again\n");
     return 0;
 }

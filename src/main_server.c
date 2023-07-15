@@ -6,7 +6,7 @@
 
 #define CONFIG_PATH "server.config"
 
-void* server()
+void *server()
 {
     printf("SERVER >> Reading conf ...\n");
     int max_cli = get_config_int_value(CONFIG_PATH, "MCLI");
@@ -16,7 +16,7 @@ void* server()
     start_server(port, max_cli);
 }
 
-void* console_input()
+void *console_input()
 {
     start_console();
 }
