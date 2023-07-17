@@ -31,7 +31,7 @@ Command line inputs and server are separated in two threads.
 ### Commands
 In command line you have this commands:
 - time [format]: will display current time, if format is specified will adapt to format, see [regex date formatting](#regex-date-formatting) to know how to use.  
-- settime <time>: will set time.  
+- settime <time>: will set time based on format "YYYY-MM-DD HH:MM:SS".  
 
 On server socket you can connect and send the format you need, the server will answer with current time formated.  
 
