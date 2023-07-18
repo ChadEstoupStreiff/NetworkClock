@@ -2,30 +2,24 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include "core/security.h"
 
 int main(int argc, char **argv)
 {
-    // Try to execute as root
-    if (setuid(0))
+    printf("INFO >> Checking...\n");
+    if (check_DEP() != 1)
     {
-        perror("Permission denied");
         exit(EXIT_FAILURE);
     }
-
+    
     // Test if argument is given
     if (argc <= 1)
-    {
-        perror("No argument given");
         exit(EXIT_FAILURE);
-    }
 
     // Convert argument to long int
     long int new_time = atol(argv[1]);
     if (new_time <= 0)
-    {
-        perror("Invalid argument");
         exit(EXIT_FAILURE);
-    }
 
     // Prepare variables to set time
     struct timeval tv;
@@ -34,10 +28,7 @@ int main(int argc, char **argv)
 
     // Set time
     if (settimeofday(&tv, NULL) < 0)
-    {
-        perror("Can't set time");
         exit(EXIT_FAILURE);
-    }
 
     return 0;
 }

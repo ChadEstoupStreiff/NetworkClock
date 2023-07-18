@@ -16,7 +16,11 @@ char *get_time(char *format)
     char *buffer = malloc(sizeof(char) * MAX_FORMATED_TIME_LENGTH);
 
     // Format time info into buffer
-    strftime(buffer, MAX_FORMATED_TIME_LENGTH, format, timeinfo);
+    if (strftime(buffer, MAX_FORMATED_TIME_LENGTH, format, timeinfo) <= 0)
+    {
+        perror("ERROR >> Cannot format time");
+        exit(EXIT_FAILURE);
+    }
     return buffer;
 }
 

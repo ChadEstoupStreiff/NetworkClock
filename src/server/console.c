@@ -4,7 +4,7 @@
 #include "time.h"
 
 #define MAX_COMMAND_BUFFER_LENGTH 1024
-#define MAX_COMMAND_LENGTH 7
+#define MAX_COMMAND_LENGTH 8
 
 int get_command(char *buffer, char *command_buffer)
 {
@@ -24,6 +24,7 @@ int get_command(char *buffer, char *command_buffer)
         command_buffer[i] = buffer[i];
     }
 
+    command_buffer[MAX_COMMAND_LENGTH - 1] = '\0';
     return MAX_COMMAND_LENGTH;
 }
 
@@ -44,6 +45,7 @@ int get_arg(char *buffer, int command_length, char *arg_buffer)
         }
         arg_buffer[i - command_length - 1] = buffer[i];
     }
+
     arg_buffer[MAX_COMMAND_BUFFER_LENGTH - 1] = '\0';
     return MAX_COMMAND_LENGTH - command_length - 1;
 }

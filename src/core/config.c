@@ -41,9 +41,10 @@ char *get_value(char *file_path, char *key)
         if (line_length > 0 && buffer[0] != '#')
         {
             // Get key from line (from start until space)
-            char buffer_key[KEY_LENGTH];
+            char buffer_key[KEY_LENGTH + 1];
             for (int i = 0; i < KEY_LENGTH; i++)
                 buffer_key[i] = buffer[i];
+            buffer_key[KEY_LENGTH] = '\0';
 
             // If key equal needed key
             if (strcmp(buffer_key, key) == 0)
@@ -54,7 +55,10 @@ char *get_value(char *file_path, char *key)
                 for (int i = KEY_LENGTH + 1; i < LINE_BUFFER_SIZE; i++)
                 {
                     if (buffer[i] == '\n' || buffer[i] == '\0')
+                    {
+                        buffer[i] = '\0';
                         break;
+                    }
                     value[i - KEY_LENGTH - 1] = buffer[i];
                 }
                 // Close file and return

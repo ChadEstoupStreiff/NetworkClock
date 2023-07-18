@@ -4,12 +4,25 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include "core/config.h"
+#include "core/security.h"
 
 #define CONFIG_PATH "client.config"
 #define BUFFER_LENGTH 1024
 
 int main()
 {
+    printf("INFO >> Checking...\n");
+    if (check_DEP() != 1)
+    {
+        perror("ERROR >> Enable DEP(NX) to run this application");
+        exit(EXIT_FAILURE);
+    }
+    if (drop_root_privilegies() != 1)
+    {
+        perror("ERROR >> Unable to drop root privilegies");
+        exit(EXIT_FAILURE);
+    }
+
     printf("Reading conf ...\n");
     // Reading configuration
     char *addr = get_config_str_value(CONFIG_PATH, "ADDR");
