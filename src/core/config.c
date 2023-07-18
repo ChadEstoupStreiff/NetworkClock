@@ -8,7 +8,7 @@
 FILE *open_file(char *config_file_name)
 {
     // Open config file
-    FILE *file = malloc(sizeof(FILE));
+    FILE *file;
     char buffer[LINE_BUFFER_SIZE];
 
     // Crash if can't open file
@@ -33,7 +33,7 @@ char *get_value(char *file_path, char *key)
     FILE *file = open_file(file_path);
     size_t len = 0;
     int line_length = 0;
-    char *buffer = malloc(sizeof(char) * LINE_BUFFER_SIZE);
+    char *buffer;
 
     do
     {

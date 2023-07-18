@@ -128,14 +128,14 @@ explain where you want the configuration file located, what ACLs do you
 expect to apply to it, and why is that in accord with your intentions
 for the application. [-1 pt.]
 
-This is not correct:
+- ✓ This is not correct:
      FILE *file = malloc(sizeof(FILE));
      if ((file = fopen(config_file_name, "r")) == NULL)
 Malloc allocates some memory. Fopen also allocates some memory. As a
 result, the malloc pointer gets overwritten by the fopen pointer and you
 leak memory.
 
-This is not necessary:
+- ✓ This is not necessary:
      char *buffer = malloc(sizeof(char) * LINE_BUFFER_SIZE);
 Especially since you lie to the getline function by telling it that the
 size of the buffer is zero.
@@ -149,12 +149,12 @@ that's a random behavior, not a reliable thing. [-1 pt.]
 - ✓ In the same way, value returned from get_value is not a string. What
 makes a pointer a string in C? [-1 pt.]
 
-You chose to use strftime for your date/time formatting needs. Is it
+- ✓ You chose to use strftime for your date/time formatting needs. Is it
 safe? Can we trust this function?
 
 - ✓ strftime can fail, you never deal wiuth this possibility. [-1 pt.]
 
-You shouldn't use a potentially dangerous function like sprintf. Your
+- You shouldn't use a potentially dangerous function like sprintf. Your
 buffer might be big enough to hold the values, but it's still a poor
 practice. Keep in mind that the size of the buffer is a macro, someone
 might easily change in the future without realizing the consequences of
