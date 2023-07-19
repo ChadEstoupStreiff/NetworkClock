@@ -154,7 +154,7 @@ safe? Can we trust this function?
 
 - ✓ strftime can fail, you never deal wiuth this possibility. [-1 pt.]
 
-- You shouldn't use a potentially dangerous function like sprintf. Your
+- ✓ You shouldn't use a potentially dangerous function like sprintf. Your
 buffer might be big enough to hold the values, but it's still a poor
 practice. Keep in mind that the size of the buffer is a macro, someone
 might easily change in the future without realizing the consequences of
@@ -168,7 +168,7 @@ file. (Focus on the first sentence here. Don't try to fix the problem
 before you realize what the problem is! Chances are you will fix
 something that is not relevant!) [-2 pt.]
 
-- You shouldn't write functions like get_command or get_arg, where you
+- ✓ You shouldn't write functions like get_command or get_arg, where you
 modify an output buffer without knowing the size of the buffer. This is
 exactly what made C the dangerous language it is. At the very least, you
 need to provide an argument for the buffer size. Better, avoid writing
@@ -180,7 +180,7 @@ This needs to be fixed, too. (I am not deducting any point here, but
 only because it's a part of the previous error. You must fix both
 places.) (Interestingly enough, you handled this correctly in get_arg.)
 
-- The "Check if doesn't start with space, instead, throw an argument
+- ✓ The "Check if doesn't start with space, instead, throw an argument
 length of 0" in get_arg does not actually adhere to the results of
 get_command. In particular, you might be accessing an invalid memory.
 [-1 pt.]

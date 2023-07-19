@@ -40,7 +40,7 @@ int set_time(char *time)
 
         // Creating command string
         char admin_buffer[ADMIN_BUFFER_LENGTH];
-        sprintf(admin_buffer, "sudo %s %li", self_path, t);
+        snprintf(admin_buffer, ADMIN_BUFFER_LENGTH, "sudo %s %li", self_path, t);
 
         // Executing settime app
         printf("CONSOLE >> Executing command: %s\n", admin_buffer);

@@ -6,14 +6,14 @@
 #define MAX_COMMAND_BUFFER_LENGTH 1024
 #define MAX_COMMAND_LENGTH 8
 
-int get_command(char *buffer, char *command_buffer)
+int get_command(char *buffer, int buffer_length, char *command_buffer)
 {
     // Check if doesn't start with space, instead, throw a command length of 0
     if (buffer[0] == ' ')
         return 0;
 
     // Will copy every car until space or end of input
-    for (int i = 0; i < MAX_COMMAND_LENGTH; i++)
+    for (int i = 0; i < buffer_length; i++)
     {
         // If space or end of input return buffer and command length
         if (buffer[i] == ' ' || buffer[i] == '\0' || buffer[i] == '\n')
@@ -24,18 +24,18 @@ int get_command(char *buffer, char *command_buffer)
         command_buffer[i] = buffer[i];
     }
 
-    command_buffer[MAX_COMMAND_LENGTH - 1] = '\0';
-    return MAX_COMMAND_LENGTH;
+    command_buffer[buffer_length - 1] = '\0';
+    return buffer_length;
 }
 
-int get_arg(char *buffer, int command_length, char *arg_buffer)
+int get_arg(char *buffer, int buffer_length, int command_length, char *arg_buffer)
 {
     // Check if doesn't start with space, instead, throw an argument length of 0
-    if (buffer[command_length + 1] == ' ' || buffer[command_length + 1] == '\0' || buffer[command_length + 1] == '\n')
+    if (strlen(buffer) <= command_length || buffer[command_length + 1] == ' ' || buffer[command_length + 1] == '\0' || buffer[command_length + 1] == '\n')
         return 0;
 
     // Will copy every car until end of input
-    for (int i = command_length + 1; i < MAX_COMMAND_BUFFER_LENGTH; i++)
+    for (int i = command_length + 1; i < buffer_length; i++)
     {
         // If end of input return buffer and command length
         if (buffer[i] == '\0' || buffer[i] == '\n')
@@ -46,7 +46,7 @@ int get_arg(char *buffer, int command_length, char *arg_buffer)
         arg_buffer[i - command_length - 1] = buffer[i];
     }
 
-    arg_buffer[MAX_COMMAND_BUFFER_LENGTH - 1] = '\0';
+    arg_buffer[buffer_length - 1] = '\0';
     return MAX_COMMAND_LENGTH - command_length - 1;
 }
 
@@ -69,7 +69,7 @@ void start_console()
 
         // Setup space for command input
         char *command = malloc(sizeof(char) * MAX_COMMAND_LENGTH);
-        int command_length = get_command(buffer, command);
+        int command_length = get_command(buffer, MAX_COMMAND_LENGTH, command);
 
         // If there is a command
         if (command_length > 0)
@@ -79,7 +79,7 @@ void start_console()
             {
                 // Setup space for argument input and get argument
                 char *arg = malloc(sizeof(char) * (MAX_COMMAND_BUFFER_LENGTH - command_length - 1));
-                int arg_length = get_arg(buffer, command_length, arg);
+                int arg_length = get_arg(buffer, MAX_COMMAND_BUFFER_LENGTH, command_length, arg);
 
                 // If no argument, get default time format, instead give a formated current time
                 char *time;
@@ -95,7 +95,7 @@ void start_console()
             {
                 // Setup space for argument input and get argument
                 char *arg = malloc(sizeof(char) * (MAX_COMMAND_BUFFER_LENGTH - command_length - 1));
-                int arg_length = get_arg(buffer, command_length, arg);
+                int arg_length = get_arg(buffer, (MAX_COMMAND_BUFFER_LENGTH - command_length - 1), command_length, arg);
 
                 // If no argument, print error, instead set time based on argument
                 char *time;
