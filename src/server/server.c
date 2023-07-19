@@ -64,13 +64,23 @@ void start_server(int port, int max_clients)
             {
                 // Read from connection
                 char buffer[BUFFER_LENGTH];
-                valread = read(new_socket, buffer, BUFFER_LENGTH - 1);
-                if (valread == -1)
+                int valread = 0;
+                char current_read;
+
+                do
                 {
-                    perror("SERVER >> Error reading");
-                    exit(EXIT_FAILURE);
-                }
-                buffer[valread] = '\0';
+                    if (read(new_socket, &current_read, 1) <= 0)
+                    {
+                        valread = -1;
+                        break;
+                    }
+                    buffer[valread] = current_read;
+                    valread++;
+                } while (current_read != '\0' && current_read != '\n');
+
+                if (valread == -1)
+                    break;
+                buffer[valread - 1] = '\0';
                 printf("SERVER >> [CLIENT %i] Client time format request: %s\n", cliend_id, buffer);
 
                 // Get time based on readed request
@@ -81,18 +91,21 @@ void start_server(int port, int max_clients)
                     answer = get_time(buffer);
 
                 // Send answer
-                send(new_socket, answer, strlen(answer), 0);
+                send(new_socket, answer, strlen(answer) + 1, 0);
                 printf("SERVER >> [CLIENT %i] Answer: %s\n", cliend_id, answer);
-            } while (valread > 0);
+            } while (valread >= 0);
 
             // Close connection
             close(new_socket);
             printf("SERVER >> [CLIENT %i] Client disconnected\n", cliend_id);
+            break;
         case -1:
             // Error
             close(new_socket);
             printf("SERVER >> [CLIENT %i] Error creating client processus, client disconnected\n", cliend_id);
+            break;
         default:
+            break;
         }
     }
 }

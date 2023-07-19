@@ -198,6 +198,6 @@ network part is that you properly implement connection control so that
 you can be certain to get a full message and then process it, properly
 splitting it if you get multiple messages. [-1 pt.]
 
-- In neither of the applications did you implement the optional security
+- ✓ In neither of the applications did you implement the optional security
 parts parts - you didn't discard unnecessary privileges and didn't make
 sure that DEP is active. [-4 pt.]

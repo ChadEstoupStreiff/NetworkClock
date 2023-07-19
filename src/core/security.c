@@ -35,12 +35,10 @@ int drop_privilegies()
         return 0;
     
     if (prctl(PR_CAPBSET_DROP, CAP_LAST_CAP, 0, 0, 0) == -1) {
-        perror("Capabalities dropping failed");
         return 1;
     }
 
     if (prctl(PR_CAPBSET_READ, CAP_LAST_CAP) == -1) {
-        perror("Capabalities not dropped");
         return 1;
     }
 
@@ -68,12 +66,6 @@ int enable_settime_capability()
     if (cap_get_flag(caps_enabled, CAP_EFFECTIVE, 1, &cap_value) == -1) {
         perror("cap_get_flag");
         return 1;
-    }
-
-    if (cap_value == CAP_SYS_TIME) {
-        printf("CAP_SYS_TIME capability enabled.\n");
-    } else {
-        printf("Failed to enable CAP_SYS_TIME capability.\n");
     }
 
     cap_free(caps);

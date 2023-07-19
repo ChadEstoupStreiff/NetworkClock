@@ -31,7 +31,6 @@ void *console_input()
 int main(int argc, char const *argv[])
 {
     // Check security
-    printf("INFO >> Checking...\n");
     if (check_DEP() != 0)
     {
         exit(EXIT_FAILURE);
@@ -78,7 +77,7 @@ int main(int argc, char const *argv[])
         tv.tv_usec = 0;
 
         // Set time
-        if (settimeofday(&tv, NULL) < 0)
+        if (settimeofday(&tv, NULL) != 0)
             exit(EXIT_FAILURE);
 
         return 0;

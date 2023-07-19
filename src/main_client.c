@@ -57,7 +57,7 @@ int main()
             fgets(message, BUFFER_LENGTH, stdin);
 
             // Send message to server
-            if (send(sock, message, BUFFER_LENGTH, 0) == -1)
+            if (send(sock, message, strlen(message), 0) == -1)
             {
                 perror("SERVER >> Error sending");
                 exit(EXIT_FAILURE);
@@ -66,17 +66,30 @@ int main()
 
             // Get answer from server
             char buffer[BUFFER_LENGTH];
-            valread = read(sock, buffer, BUFFER_LENGTH);
-            if (valread == -1)
+            int valread = 0;
+            char current_read;
+
+            do
             {
-                perror("Error reading");
-                exit(EXIT_FAILURE);
-            }
-            buffer[valread] = '\0';
+                if (read(sock, &current_read, 1) <= 0)
+                {
+                    valread = -1;
+                    break;
+                }
+                printf("Readed: %c\n", current_read);
+                buffer[valread] = current_read;
+                valread++;
+            } while (current_read != '\0' && current_read != '\n');
+
+            if (valread == -1)
+                break;
+            buffer[valread - 1] = '\0';
 
             // Print answer to clinet
             printf("Server answer: %s\n", buffer);
         }
+        close(sock);
+        printf("Server closed\n");
     }
     else
         printf("Error connecting ! Try again\n");
