@@ -160,7 +160,7 @@ practice. Keep in mind that the size of the buffer is a macro, someone
 might easily change in the future without realizing the consequences of
 that.
 
-- Where do you expect settime_app to be located? I suspect you implemented
+- ✓ Where do you expect settime_app to be located? I suspect you implemented
 something else than what you intended. Even if the implementation
 matches your intentions, you need to at least explain it - I think your
 implementation is dangerous, it can easily lead to running an incorrect
@@ -185,7 +185,7 @@ length of 0" in get_arg does not actually adhere to the results of
 get_command. In particular, you might be accessing an invalid memory.
 [-1 pt.]
 
-- fgets can fail. We discussed this in detail during a tutorial. [-1 pt.]
+- ✓ fgets can fail. We discussed this in detail during a tutorial. [-1 pt.]
 
 Note that read() will read any characters, including \0.
 

@@ -58,7 +58,14 @@ void start_console()
     {
         // Get client input
         printf("CONSOLE >> Enter command:\n");
-        fgets(buffer, MAX_COMMAND_BUFFER_LENGTH, stdin);
+        if (fgets(buffer, MAX_COMMAND_BUFFER_LENGTH, stdin) == NULL)
+        {
+            perror("CONSOLE >> Error reading input");
+            exit(EXIT_FAILURE);
+        }
+        size_t len = strlen(buffer);
+        if (len > 0 && buffer[len - 1] == '\n')
+            buffer[len - 1] = '\0';
 
         // Setup space for command input
         char *command = malloc(sizeof(char) * MAX_COMMAND_LENGTH);

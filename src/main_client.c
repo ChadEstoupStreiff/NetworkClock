@@ -54,15 +54,22 @@ int main()
             // Take input from user
             char message[BUFFER_LENGTH];
             printf("\nType time format you want:\n");
-            fgets(message, BUFFER_LENGTH, stdin);
-
-            // Send message to server
-            if (send(sock, message, strlen(message), 0) == -1)
+            if (fgets(message, BUFFER_LENGTH, stdin) == NULL)
             {
-                perror("SERVER >> Error sending");
+                perror("CONSOLE >> Error reading input");
                 exit(EXIT_FAILURE);
             }
+            size_t len = strlen(message);
+            if (len > 0 && message[len - 1] == '\n')
+                message[len - 1] = '\0';
+
+            // Send message to server
             printf("Format request: %s\n", message);
+            if (send(sock, message, strlen(message) + 1, 0) == -1)
+            {
+                perror("Error sending");
+                exit(EXIT_FAILURE);
+            }
 
             // Get answer from server
             char buffer[BUFFER_LENGTH];
