@@ -189,7 +189,7 @@ get_command. In particular, you might be accessing an invalid memory.
 
 Note that read() will read any characters, including \0.
 
-- Note that read(1024) does not actually get you a result similar to using
+- ✓ Note that read(1024) does not actually get you a result similar to using
 fgets() - it gets you whatever is available in the buffer now, but that
 doesn't have to be a full input, even if the full input is shorter than
 1024 bytes! When someone sends "Hello", the command can easily return

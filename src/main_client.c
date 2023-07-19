@@ -76,7 +76,6 @@ int main()
                     valread = -1;
                     break;
                 }
-                printf("Readed: %c\n", current_read);
                 buffer[valread] = current_read;
                 valread++;
             } while (current_read != '\0' && current_read != '\n');
