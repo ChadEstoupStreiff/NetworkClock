@@ -13,15 +13,9 @@ int main()
 {
     printf("Checking...\n");
     if (check_DEP() != 0)
-    {
-        perror("ERROR >> Enable DEP(NX) to run this application");
-        exit(EXIT_FAILURE);
-    }
+        perror("WARNING >> DEP(NX) is not enabled !");
     if (drop_privilegies() != 0)
-    {
-        perror("ERROR >> Unable to drop root privilegies");
-        exit(EXIT_FAILURE);
-    }
+        perror("WARNING >> Wrong privileges !");
 
     printf("Reading conf ...\n");
     // Reading configuration

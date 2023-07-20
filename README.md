@@ -10,7 +10,7 @@ After editing config files, you can launch server or client by executing those c
 > bash server_app  
 > bash client_app  
 
-You'll obtain applications in bin folder, all of them follows ACLs 100, that means only the user got permission to only execute them. Configuration files are also in bin folder aside of applications and all of them follows ACL 600, that means only user got permissions to read and write them.
+You'll obtain applications in bin folder, all of them follow ACLs 100, that means only the owner gets permission to only execute them. Configuration files are also in the bin folder aside from applications and all of them follow ACL 600, that means only the owner gets permissions to read and write them.
 
 ## Objectives
 - In order to be eligible for any points, the application must, at the very least, work locally for the interactive user: The non-network user must be able to request the time in a format specified by him, and must be able to set the system time. The application must run with the privileges of a regular user, any high privileged tasks must be done through a separate application which will be executed with elevated privileges.  

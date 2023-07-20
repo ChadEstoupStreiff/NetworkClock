@@ -7,18 +7,9 @@ int main(int argc, char const *argv[])
 {
     if (argc == 2)
     {
-        if (check_DEP() != 0)
-        {
-            exit(EXIT_FAILURE);
-        }
-        if (drop_privilegies() != 0)
-        {
-            exit(EXIT_FAILURE);
-        }
-        if (enable_settime_capability() != 0)
-        {
-            exit(EXIT_FAILURE);
-        }
+        check_DEP();
+        drop_privilegies();
+        enable_settime_capability();
 
         // Convert argument to long int
         long int new_time = atol(argv[1]);

@@ -31,13 +31,9 @@ int main(int argc, char const *argv[])
 {
     // Check security
     if (check_DEP() != 0)
-    {
-        exit(EXIT_FAILURE);
-    }
+        perror("WARNING >> DEP(NX) is not enabled !");
     if (drop_privilegies() != 0)
-    {
-        exit(EXIT_FAILURE);
-    }
+        perror("WARNING >> Wrong privileges !");
     if (argc == 1)
     {
         printf("INFO >> Starting...\n");
