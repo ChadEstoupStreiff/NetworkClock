@@ -10,6 +10,8 @@ After editing config files, you can launch server or client by executing those c
 > bash server_app  
 > bash client_app  
 
+You'll obtain applications in bin folder, all of them follows ACLs 100, that means only the user got permission to only execute them. Configuration files are also in bin folder aside of applications and all of them follows ACL 600, that means only user got permissions to read and write them.
+
 ## Objectives
 - In order to be eligible for any points, the application must, at the very least, work locally for the interactive user: The non-network user must be able to request the time in a format specified by him, and must be able to set the system time. The application must run with the privileges of a regular user, any high privileged tasks must be done through a separate application which will be executed with elevated privileges.  
     - Make sure the application isn’t vulnerable to buffer overflow, format string abuse, malformed input, etc.
@@ -103,101 +105,151 @@ PORT 8081
 
 
 ## Comments:
-### settime:
+- ✓ I will ask you to return the main_settime application. I agree that it
+is elegant to keep everything in the same file (although I don't quite
+understand why you read the /proc/self/exe file to get its name),
+butit's really not suitable for the purpose - we want the privileged
+application to be as tiny as possible, and making it a part of the main
+application goes directly against that goal. Basically, you are now not
+satisfying the requirement for a minimal easy-to-check application. [-25
+pt.]
 
-- ✓ As discussed during the lecture, it's generally a very bad idea to
-verify that a user is root. After all, you don't need root privileges,
-the only reason you are making that test is because root usually has the
-privileges that you need - but a non-root user can have them too and by
-requiring root you are violating the least privilege principle. Remove
-the check. [-2 pt.]
+>     server:
+> 
+>     You are reading the port from a configuration file. Your implementation
+>     may or may not be correct, depending on your intentions. You should
+>     explain where you want the configuration file located, what ACLs do you
+>     expect to apply to it, and why is that in accord with your intentions
+>     for the application. [-1 pt.]
 
-- ✓ You shouldn't print out detailed error messages. They won't help the
-user because the user won't see them (or, if they see them, they won't
-understand them). They won't help the developer because the developer
-already made sure the application is correct (we specifically made the
-application as simple as possible to achieve this goal). The only one
-who can benefit from the messages is the attacker, and why should we
-help them? [-1 pt.]
+- ✓ This is not about a code but about an explanation of your choice. I
+still need it. [-1 pt.]
 
-### server:
+>     This is not correct:
+>           FILE *file = malloc(sizeof(FILE));
+>           if ((file = fopen(config_file_name, "r")) == NULL)
+>     Malloc allocates some memory. Fopen also allocates some memory. As a
+>     result, the malloc pointer gets overwritten by the fopen pointer and
+>     you
+>     leak memory.
 
-- You are reading the port from a configuration file. Your implementation
-may or may not be correct, depending on your intentions. You should
-explain where you want the configuration file located, what ACLs do you
-expect to apply to it, and why is that in accord with your intentions
-for the application. [-1 pt.]
+Fixed.
 
-- ✓ This is not correct:
-     FILE *file = malloc(sizeof(FILE));
-     if ((file = fopen(config_file_name, "r")) == NULL)
-Malloc allocates some memory. Fopen also allocates some memory. As a
-result, the malloc pointer gets overwritten by the fopen pointer and you
-leak memory.
+>     This is not necessary:
+>           char *buffer = malloc(sizeof(char) * LINE_BUFFER_SIZE);
+>     Especially since you lie to the getline function by telling it that the
+>     size of the buffer is zero.
 
-- ✓ This is not necessary:
-     char *buffer = malloc(sizeof(char) * LINE_BUFFER_SIZE);
-Especially since you lie to the getline function by telling it that the
-size of the buffer is zero.
+- ✓ Changed to a incorrect version. Just char *buffer; is not sufficient for
+the function to work. The application can crash here or even cause a
+buffer overflow. [-1 pt.]
 
-- ✓ You cannot use strcmp here:
-             // If key equal needed key
-             if (strcmp(buffer_key, key) == 0)
-because buffer_key is not a string. The code might work for you, but
-that's a random behavior, not a reliable thing. [-1 pt.]
+>     You cannot use strcmp here:
+>                   // If key equal needed key
+>                   if (strcmp(buffer_key, key) == 0)
+>     because buffer_key is not a string. The code might work for you, but
+>     that's a random behavior, not a reliable thing. [-1 pt.]
 
-- ✓ In the same way, value returned from get_value is not a string. What
-makes a pointer a string in C? [-1 pt.]
+Fixed.
 
-- ✓ You chose to use strftime for your date/time formatting needs. Is it
-safe? Can we trust this function?
+>     In the same way, value returned from get_value is not a string. What
+>     makes a pointer a string in C? [-1 pt.]
 
-- ✓ strftime can fail, you never deal wiuth this possibility. [-1 pt.]
+- ✓ It's better now, but the value can still be a non-string. [-1 pt.]
 
-- ✓ You shouldn't use a potentially dangerous function like sprintf. Your
-buffer might be big enough to hold the values, but it's still a poor
-practice. Keep in mind that the size of the buffer is a macro, someone
-might easily change in the future without realizing the consequences of
-that.
+>     You chose to use strftime for your date/time formatting needs. Is it
+>     safe? Can we trust this function?
+> 
+>     strftime can fail, you never deal wiuth this possibility. [-1 pt.]
 
-- ✓ Where do you expect settime_app to be located? I suspect you implemented
-something else than what you intended. Even if the implementation
-matches your intentions, you need to at least explain it - I think your
-implementation is dangerous, it can easily lead to running an incorrect
-file. (Focus on the first sentence here. Don't try to fix the problem
-before you realize what the problem is! Chances are you will fix
-something that is not relevant!) [-2 pt.]
+Fixed.
 
-- ✓ You shouldn't write functions like get_command or get_arg, where you
-modify an output buffer without knowing the size of the buffer. This is
-exactly what made C the dangerous language it is. At the very least, you
-need to provide an argument for the buffer size. Better, avoid writing
-data into memory. After all, you don't need it - certainly not in
-get_command. [-1 pt.]
+>     Where do you expect settime_app to be located? I suspect you
+>     implemented
+>     something else than what you intended. Even if the implementation
+>     matches your intentions, you need to at least explain it - I think your
+>     implementation is dangerous, it can easily lead to running an incorrect
+>     file. (Focus on the first sentence here. Don't try to fix the problem
+>     before you realize what the problem is! Chances are you will fix
+>     something that is not relevant!) [-2 pt.]
 
-- ✓ Similarly to get_value, the result of get_command might not be a string.
-This needs to be fixed, too. (I am not deducting any point here, but
-only because it's a part of the previous error. You must fix both
-places.) (Interestingly enough, you handled this correctly in get_arg.)
+- Will be relevant again once you return a standalone settime.
 
-- ✓ The "Check if doesn't start with space, instead, throw an argument
-length of 0" in get_arg does not actually adhere to the results of
-get_command. In particular, you might be accessing an invalid memory.
-[-1 pt.]
+>     You shouldn't write functions like get_command or get_arg, where you
+>     modify an output buffer without knowing the size of the buffer. This is
+>     exactly what made C the dangerous language it is. At the very least,
+>     you
+>     need to provide an argument for the buffer size. Better, avoid writing
+>     data into memory. After all, you don't need it - certainly not in
+>     get_command. [-1 pt.]
 
-- ✓ fgets can fail. We discussed this in detail during a tutorial. [-1 pt.]
+Fixed.
 
-Note that read() will read any characters, including \0.
+>     Similarly to get_value, the result of get_command might not be a
+>     string.
+>     This needs to be fixed, too. (I am not deducting any point here, but
+>     only because it's a part of the previous error. You must fix both
+>     places.) (Interestingly enough, you handled this correctly in get_arg.)
 
-- ✓ Note that read(1024) does not actually get you a result similar to using
-fgets() - it gets you whatever is available in the buffer now, but that
-doesn't have to be a full input, even if the full input is shorter than
-1024 bytes! When someone sends "Hello", the command can easily return
-just "H" or "He", not the full message. One of the requirements for the
-network part is that you properly implement connection control so that
-you can be certain to get a full message and then process it, properly
-splitting it if you get multiple messages. [-1 pt.]
+Fixed.
 
-- ✓ In neither of the applications did you implement the optional security
-parts parts - you didn't discard unnecessary privileges and didn't make
-sure that DEP is active. [-4 pt.]
+>     The "Check if doesn't start with space, instead, throw an argument
+>     length of 0" in get_arg does not actually adhere to the results of
+>     get_command. In particular, you might be accessing an invalid memory.
+>     [-1 pt.]
+
+Fixed.
+
+>     fgets can fail. We discussed this in detail during a tutorial. [-1 pt.]
+
+Fixed.
+
+>     Note that read() will read any characters, including \0.
+> 
+>     Note that read(1024) does not actually get you a result similar to
+>     using
+>     fgets() - it gets you whatever is available in the buffer now, but that
+>     doesn't have to be a full input, even if the full input is shorter than
+>     1024 bytes! When someone sends "Hello", the command can easily return
+>     just "H" or "He", not the full message. One of the requirements for the
+>     network part is that you properly implement connection control so that
+>     you can be certain to get a full message and then process it, properly
+>     splitting it if you get multiple messages. [-1 pt.]
+
+- ✓ You fixed this specific problem, but in doing so created a buffer
+overflow. [-2 pt.]
+
+It would be more efficient (but also more complicated) to read the whole
+buffer at a time and then deal with the borderline cases.
+
+>     In neither of the applications did you implement the optional security
+>     parts parts - you didn't discard unnecessary privileges and didn't make
+>     sure that DEP is active. [-4 pt.]
+
+- Your implementation is rather problematic, for several reasons: [-4 pt.]
+
+    - You are not actually trying to enable DEP - you are verifying that the
+CPU supports it and if it doesn't, you exit the application. But the
+support for NX doesn't mean that it is actually enabled and terminating
+the application if it isn't is perhaps too strict. It would be better if
+you did your best to enable DEP but then enable anyway.
+
+    - Same for privileges - don't quit just because privileges can't be
+dropped. What if the application is already setup to use minimal
+privileges, which really is just "change the time"? Your current
+implementation would quit the application, forcing the user to actually
+increase the privileges above the required minimum. It's quite possible
+the user would just decide to run as root to be certain that the
+application will run, which is the opposite of what we want. Just like
+with DEP, you should do your best to remove the privileges but allow to
+continue regardless.
+
+    - I will need some explanation how drop_privilegies actually achieves
+the stated goal. It seems to me that it doesn't, but maybe I am
+overlooking something. But I don't think I am - after all, if you had
+dropped the privileges, then enable_settime_capability wouldn't work
+anymore because you can't enable a dropped privilege.
+
+    - Once you return the standalone settime, you will need to implement
+these features for it, too.
+

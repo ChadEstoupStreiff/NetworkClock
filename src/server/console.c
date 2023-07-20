@@ -10,7 +10,10 @@ int get_command(char *buffer, int buffer_length, char *command_buffer)
 {
     // Check if doesn't start with space, instead, throw a command length of 0
     if (buffer[0] == ' ')
+    {
+        command_buffer[0] = '\0';
         return 0;
+    }
 
     // Will copy every car until space or end of input
     for (int i = 0; i < buffer_length; i++)
@@ -32,7 +35,10 @@ int get_arg(char *buffer, int buffer_length, int command_length, char *arg_buffe
 {
     // Check if doesn't start with space, instead, throw an argument length of 0
     if (strlen(buffer) <= command_length || buffer[command_length + 1] == ' ' || buffer[command_length + 1] == '\0' || buffer[command_length + 1] == '\n')
+    {
+        arg_buffer[0] = '\0';
         return 0;
+    }
 
     // Will copy every car until end of input
     for (int i = command_length + 1; i < buffer_length; i++)

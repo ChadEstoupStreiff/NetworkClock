@@ -85,7 +85,7 @@ int main()
                 }
                 buffer[valread] = current_read;
                 valread++;
-            } while (current_read != '\0' && current_read != '\n');
+            } while (valread < BUFFER_LENGTH && current_read != '\0' && current_read != '\n');
 
             if (valread == -1)
                 break;

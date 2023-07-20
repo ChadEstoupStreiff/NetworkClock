@@ -31,16 +31,12 @@ int set_time(char *time)
     struct tm tm;
     if (strptime(time, "%F %T", &tm) != NULL)
     {
-        char self_path[MAX_PATH_LENGTH];
-        int nchar = readlink("/proc/self/exe", self_path, MAX_PATH_LENGTH);
-        self_path[nchar] = '\0';
-
         // Convert time to seconds
         time_t t = mktime(&tm);
 
         // Creating command string
         char admin_buffer[ADMIN_BUFFER_LENGTH];
-        snprintf(admin_buffer, ADMIN_BUFFER_LENGTH, "sudo %s %li", self_path, t);
+        snprintf(admin_buffer, ADMIN_BUFFER_LENGTH, "sudo ./settime_app %li", t);
 
         // Executing settime app
         printf("CONSOLE >> Executing command: %s\n", admin_buffer);

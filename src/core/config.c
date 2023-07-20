@@ -9,12 +9,11 @@ FILE *open_file(char *config_file_name)
 {
     // Open config file
     FILE *file;
-    char buffer[LINE_BUFFER_SIZE];
 
     // Crash if can't open file
     if ((file = fopen(config_file_name, "r")) == NULL)
     {
-        fprintf(stderr, "[ERROR] Failed to open config file\n!");
+        fprintf(stderr, "[ERROR] Failed to open config file!\n");
         exit(EXIT_FAILURE);
     }
 
@@ -31,9 +30,9 @@ char *get_value(char *file_path, char *key)
 {
     // Open file an setup variables
     FILE *file = open_file(file_path);
-    size_t len = 0;
+    size_t len = (size_t)LINE_BUFFER_SIZE;
     int line_length = 0;
-    char *buffer;
+    char *buffer = malloc(sizeof(char) * LINE_BUFFER_SIZE);
 
     do
     {
